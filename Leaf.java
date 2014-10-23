@@ -1,22 +1,25 @@
 class Leaf<T> implements PFB<T> {
 
     Leaf() {}
-    //Methods not necessarily implemented correctly
     
     public GSequence seq() {
 	return this;
-    }
-    
-    public T here() {
-	throw new RuntimeException("No X here");
     }
     
     public boolean isEmpty() {
 	return true;
     }
     
+    // here() is not supposed to be
+    // called unless isEmpty is false
+    public T here() {
+	throw new RuntimeException("There are no elements in this bag");
+    }
+    
+    // next() is not supposed to be
+    // called unless isEmpty is false
     public GSequence<T> next() {
-	return this;
+	throw new RuntimeException("There are nothing after this bag");
     }
 
     
@@ -37,7 +40,7 @@ class Leaf<T> implements PFB<T> {
     }
 
     public PFB<T> add(T elem) {
-	return this;
+	return new Branch<T>(elem);
     }
     
     public PFB<T> remove(T elem) {
@@ -45,22 +48,25 @@ class Leaf<T> implements PFB<T> {
     }
     
     public PFB<T> union(PFB<T> b) {
-	return this;
+	return b;
     }
 
     public PFB<T> inter(PFB<T> b) {
 	return this;
     }
 
+    // Everything in the "second" bag except those that are in the current bag
     public PFB<T> diff(PFB<T> b) {
-	return this;
+	return b;
     }
 
+    // They are equal if and only if b is empty (meaning it is a Leaf)
     public boolean equal(PFB<T> b) {
-	return false;
+	return b.isEmpty();
     }
     
+    // This bag is a subset of b if and only if b is empty (meaning it is a Leaf)
     public boolean subset(PFB<T> b) {
-	return false;
+	return b.isEmpty();
     }
 }
