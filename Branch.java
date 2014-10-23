@@ -1,14 +1,40 @@
-class Branch<T> implements PFB<T> {
+import java.awt.Color;
 
-    Branch() {}
-    //Methods not necessarily implemented correctly
+class Node<T> {
+    T datum;
+    Color color; // RED or BLACK
+    Node<T> parent;
+    
+    Node(T elem, Color color, Node<t> p) {
+    	this.datum = elem;
+    	this.color = color;
+    	this.parent = p;
+    }
+}
+
+class Branch<T> implements PFB<T> {
+    private Node<T> here;
+    private Branch<T> leff;
+    private Branch<T> right;
+    
+    Branch(Node n) {
+    	this.here = n;
+    	this.left = new Leaf<T>();
+    	this.right = new Leaf<T>();
+    }
+    
+    Branch(Node n, Branch<T> left, Branch<T> right) {
+    	this.here = n;
+    	this.left = left;
+    	this.right = right;
+    }
     
     public GSequence seq() {
 	return this;
     }
     
     public T here() {
-	throw new RuntimeException("No X here");
+	return here.datum;
     }
     
     public boolean isEmpty() {
@@ -25,15 +51,23 @@ class Branch<T> implements PFB<T> {
     }
     
     public PFB<T> empty() {
-	return this;
+	return new Leaf<T>();
     }
     
     public int cardinality() {
-	return 0;
+	return (left.cardinality() + right.cardinality() + 1);
     }
     
     public boolean member(T elem) {
-	return false;
+	if(elem == here.datum)
+	    return true;
+	
+	else if (elem < here.datum)
+	    return left.member(elem);
+	    
+	else
+	    return right.member(elem);
+	
     }
 
     public PFB<T> add(T elem) {
