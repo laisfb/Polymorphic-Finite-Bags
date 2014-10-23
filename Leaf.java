@@ -3,7 +3,7 @@ class Leaf<T> implements PFB<T> {
     Leaf() {}
     
     public GSequence seq() {
-	return this;
+	return this; //xxxxxxxxxxx
     }
     
     public boolean isEmpty() {
@@ -41,6 +41,10 @@ class Leaf<T> implements PFB<T> {
 
     public PFB<T> add(T elem) {
 	return new Branch<T>(elem);
+    }
+
+    public PFB<T> add(T elem, Branch<T> parent) {
+	return new Branch<T>(elem, parent);
     }
     
     public PFB<T> remove(T elem) {
