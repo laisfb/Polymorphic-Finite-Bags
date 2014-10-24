@@ -1,6 +1,9 @@
-class Leaf<T> implements PFB<T> {
-
-    Leaf() {}
+class Leaf<T extends Comparable> implements PFB<T> {
+    private Color color;
+    
+    Leaf() {
+        this.color = Color.black; // By definition, all leaves are black
+    }
     
     public GSequence seq() {
 	return this; //xxxxxxxxxxx
@@ -43,7 +46,7 @@ class Leaf<T> implements PFB<T> {
 	return new Branch<T>(elem);
     }
 
-    public PFB<T> add(T elem, Branch<T> parent) {
+    public PFB<T> add(T elem, PFB<T> parent) {
 	return new Branch<T>(elem, parent);
     }
     
