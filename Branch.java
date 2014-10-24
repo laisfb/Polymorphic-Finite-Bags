@@ -1,26 +1,25 @@
-import java.awt.Color;
+public enum Color { black, red };
 
-class Branch<T> implements PFB<T> {
-    
+class Branch<T extends Comparable> implements PFB<T> {
     private T datum;
-    private Color color; // RED or BLACK
-    private Branch<T> parent;
+    private Color color;
+    private PFB<T> parent;
     
-    private Branch<T> leff;
-    private Branch<T> right;
+    private PFB<T> left;
+    private PFB<T> right;
     
     Branch(T elem) {
-    	this.datum = elem;
-    	this.color = Color.BLACK;
+        this.datum = elem;
+    	this.color = Color.black;
     	this.parent = null;
     	
     	this.left = new Leaf<T>();
     	this.right = new Leaf<T>();
     }
     
-    Branch(T elem, Branch<T> parent) {
+    Branch(T elem, PFB<T> parent) {
     	this.datum = elem;
-    	this.color = Color.BLACK;
+    	this.color = Color.black;
     	this.parent = parent;
     	
     	this.left = new Leaf<T>();
@@ -57,10 +56,10 @@ class Branch<T> implements PFB<T> {
     }
     
     public boolean member(T elem) {
-	if (elem == this.datum)
+	if (elem.equal(this.datum))
 	    return true;
 	
-	else if (elem < this.datum)
+	else if (elem.lessThan(this.datum))
 	    return left.member(elem);
 	    
 	else
@@ -74,32 +73,34 @@ class Branch<T> implements PFB<T> {
     	// so property 4 (both children of every red node 
     	// are black) is not invalidated. In this case, 
     	// the node can be inserted as in the "normal" tree.
-    	if(this.parent.color == Color.BLACK) {
-    	    if (elem < this.datum)
-    	        return left.add(elem, this);
-    	        
-    	    else if (elem > this.datum)
-    	        return right.add(elem, this);
-    	}
+    	//if(this.parent.color == Color.black) {
+    	//    if (elem.lessThan(this.datum))
+    	//        return left.add(elem, this);
+    	//        
+    	//   else if (elem.greaterThan(this.datum))
+    	//        return right.add(elem, this);
+    	//}
     	
     	// Case 3: If both the parent P and the uncle U are red.
     	// Then both of them can be repainted black and the 
     	// grandparent G becomes red.
-    	...
+    	//...
     	
     	// Case 4: The parent P is red but the uncle U is black.
     	// Also, the current node N is the right child of P, 
     	// and P in turn is the left child of its parent G.
-    	...
-    	
+    	//...
+    	return this;
     }
 
-    public PFB<T> add(T elem, Branch<T> parent) {
-    	if (elem < this.datum)
+    public PFB<T> add(T elem, PFB<T> parent) {
+    	if (elem.lessThan(this.datum))
     	    return left.add(elem, this);
     	    
-    	else if (elem > this.datum)
+    	else if (elem.greaterThan(this.datum))
     	    return right.add(elem, this);
+            
+        return this;
 
     }
     
