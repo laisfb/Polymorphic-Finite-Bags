@@ -1,12 +1,12 @@
 public enum Color { black, red };
 
 class Branch<T extends Comparable> implements PFB<T> {
-    private T datum;
-    private Color color;
-    private PFB<T> parent;
+    public T datum;
+    public Color color;
+    public PFB<T> parent;
     
-    private PFB<T> left;
-    private PFB<T> right;
+    public PFB<T> left;
+    public PFB<T> right;
     
     Branch(T elem) {
         this.datum = elem;
@@ -30,12 +30,12 @@ class Branch<T extends Comparable> implements PFB<T> {
 	return this; //xxxxxxxxxxx
     }
     
-    public T here() {
-	return this.datum;
+    public boolean hasNext() {
+    	return !(left.isEmpty() && right.isEmpty());
     }
     
-    public boolean isEmpty() {
-	return false;
+    public T here() {
+	return this.datum;
     }
     
     public GSequence<T> next() {
@@ -51,15 +51,19 @@ class Branch<T extends Comparable> implements PFB<T> {
 	return new Leaf<T>();
     }
     
+    public boolean isEmpty() {
+    	return false;
+    }
+    
     public int cardinality() {
 	return (left.cardinality() + right.cardinality() + 1);
     }
     
     public boolean member(T elem) {
-	if (elem.equal(this.datum))
+	if (elem.equals(this.datum))
 	    return true;
 	
-	else if (elem.lessThan(this.datum))
+	else if (elem.compareTo(this.datum) < 0)
 	    return left.member(elem);
 	    
 	else
@@ -93,11 +97,12 @@ class Branch<T extends Comparable> implements PFB<T> {
     	return this;
     }
 
+    // Still can't add repeated numbers
     public PFB<T> add(T elem, PFB<T> parent) {
-    	if (elem.lessThan(this.datum))
+    	if (elem.compareTo(this.datum) < 0)
     	    return left.add(elem, this);
     	    
-    	else if (elem.greaterThan(this.datum))
+    	else if (elem.compareTo(this.datum) > 0)
     	    return right.add(elem, this);
             
         return this;
