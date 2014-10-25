@@ -20,7 +20,7 @@ class Leaf<T extends Comparable> implements PFB<T> {
     }
     
     // next() is not supposed to be
-    // called unless isEmpty is false
+    // called unless hasNext is true
     public GSequence<T> next() {
 	throw new RuntimeException("There are nothing after this bag");
     }
