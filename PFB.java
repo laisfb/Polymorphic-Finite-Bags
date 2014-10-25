@@ -6,16 +6,8 @@ interface GSequence<T> {
     public T here();
     public boolean hasNext();
     public GSequence<T> next();
-    // If isEmpty() returns true, then here()
+    // If hasNext() returns false, then here()
     // and next() can return anything
-}
-
-interface Comparable {
-    public boolean equal (Comparable c);
-    public boolean greaterThan (Comparable c);
-    public boolean greaterThanEq (Comparable c);
-    public boolean lessThan (Comparable c);
-    public boolean lessThanEq (Comparable c);
 }
 
 // PFB stands for Polymorphic Finite Bags
@@ -58,6 +50,9 @@ interface PFB<T> extends GSequence<T>, Sequence<T> {
     
     // Returns a fresh empty bag
     public PFB<T> empty();
+    
+    // Returns if the bag is empty
+    public boolean isEmpty();
     
     // Returns the number of elements in the bag
     public int cardinality();
