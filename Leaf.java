@@ -1,16 +1,16 @@
 class Leaf<T extends Comparable> implements PFB<T> {
-    private Color color;
+    public Color color;
     
     Leaf() {
         this.color = Color.black; // By definition, all leaves are black
     }
     
     public GSequence seq() {
-	return this; //xxxxxxxxxxx
+	return this;
     }
     
-    public boolean isEmpty() {
-	return true;
+    public boolean hasNext() {
+	return false;
     }
     
     // here() is not supposed to be
@@ -34,6 +34,10 @@ class Leaf<T extends Comparable> implements PFB<T> {
 	return this;
     }
     
+    public boolean isEmpty() {
+	return true;
+    }
+    
     public int cardinality() {
 	return 0;
     }
@@ -51,7 +55,7 @@ class Leaf<T extends Comparable> implements PFB<T> {
     }
     
     public PFB<T> remove(T elem) {
-	return this;
+	throw new RuntimeException("This element is not in this bag");
     }
     
     public PFB<T> union(PFB<T> b) {
