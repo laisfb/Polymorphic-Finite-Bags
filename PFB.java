@@ -45,6 +45,8 @@ interface PFB<T> extends GSequence<T>, Sequence<T> {
     // Returns how many of "elem" are in the bag
     public int howMany(T elem);
     
+    public Color getColor();
+    public void setColor(Color c);
     
     // --- Properties of the old Finite Set ---
     
@@ -62,7 +64,9 @@ interface PFB<T> extends GSequence<T>, Sequence<T> {
 
     // Returns a new bag containing elem and everything in the bag
     public PFB<T> add(T elem);
+    
     public PFB<T> add(T elem, PFB<T> parent);
+    public PFB<T> generateBranch(T elem, PFB<T> parent);
     
     // Returns a new bag containing everything in the bag, except elem
     public PFB<T> remove(T elem);
