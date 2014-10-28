@@ -5,8 +5,16 @@ class Leaf<T extends Comparable> implements PFB<T> {
         this.color = Color.black; // By definition, all leaves are black
     }
     
+    public Color getColor() {
+        return this.color;
+    }
+    
+    public void setColor(Color c) {
+        this.color = c;
+    }
+    
     public GSequence seq() {
-	return this;
+    return this;
     }
     
     public boolean hasNext() {
@@ -50,12 +58,16 @@ class Leaf<T extends Comparable> implements PFB<T> {
 	return new Branch<T>(elem);
     }
 
+    public PFB<T> generateBranch(T elem, PFB<T> parent) {
+    return new Branch<T>(elem, (Branch)parent);
+    }
+
     public PFB<T> add(T elem, PFB<T> parent) {
-	return new Branch<T>(elem, parent);
+	return new Branch<T>(elem, (Branch)parent);
     }
     
     public PFB<T> remove(T elem) {
-	throw new RuntimeException("This element is not in this bag");
+    	return this;
     }
     
     public PFB<T> union(PFB<T> b) {
@@ -79,5 +91,9 @@ class Leaf<T extends Comparable> implements PFB<T> {
     // This bag is a subset of b if and only if b is empty (meaning it is a Leaf)
     public boolean subset(PFB<T> b) {
 	return b.isEmpty();
+    }
+    
+    public String toString() {
+        return "( " + this.color + " )";
     }
 }
