@@ -14,7 +14,7 @@ class Leaf<T extends Comparable> implements PFB<T> {
     }
     
     public GSequence seq() {
-    return this;
+	return this;
     }
     
     public boolean hasNext() {
@@ -59,11 +59,13 @@ class Leaf<T extends Comparable> implements PFB<T> {
     }
 
     public PFB<T> generateBranch(T elem, PFB<T> parent) {
-    return new Branch<T>(elem, (Branch)parent);
+	return new Branch<T>(elem);
+	// return new Branch<T>(elem, (Branch)parent);
     }
 
     public PFB<T> add(T elem, PFB<T> parent) {
-	return new Branch<T>(elem, (Branch)parent);
+	return new Branch<T>(elem);
+	// return new Branch<T>(elem, (Branch)parent);
     }
     
     public PFB<T> remove(T elem) {
@@ -94,6 +96,7 @@ class Leaf<T extends Comparable> implements PFB<T> {
     }
     
     public String toString() {
-        return "( " + this.color + " )";
+	return "_";
+	//return "( " + this.color + " )";
     }
 }
