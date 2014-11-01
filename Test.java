@@ -1,90 +1,127 @@
+// M-x compile
+// java -cp . *.java && java -cp . Test /// Test is the name of the class you are running
+// M-x global-set-key
+// F5
+// compile
+
+import java.util.Random;
+
 public class Test {
 
-    public static void testLeaf() {
-        Leaf l = new Leaf();
-        
-        //System.out.println("Color: " + l.color);
-        System.out.println("Seq: " + l.seq());
-        System.out.println("hasNext: " + l.hasNext());
-        //System.out.println("here: " + l.here());
-        //System.out.println("next: " + l.next());
-        
-        System.out.println("howMany: " + l.howMany(10));
-        System.out.println("empty: " + l.empty());
-        System.out.println("isEmpty: " + l.isEmpty());
-        System.out.println("cardinality: " + l.cardinality());
-        System.out.println("member: " + l.member(20));
- 
-        System.out.println("add: " + l.add(20));
-        //System.out.println("add w/ parent: " + l.add(20, new Branch(10)));
-        //System.out.println("remove: " + l.remove(10));
-        
-        System.out.println("union1: " + l.union(l));
-        System.out.println("union2: " + l.union(l.add(10)));
-        
-        System.out.println("inter1: " + l.inter(l));
-        System.out.println("inter2: " + l.inter(l.add(10)));
-        
-        System.out.println("diff1: " + l.diff(l));
-        System.out.println("diff2: " + l.diff(l.add(10)));
-        
-        System.out.println("subset1: " + l.subset(l));
-        System.out.println("subset2: " + l.subset(l.add(10)));
-    
+    // Helper methods
+
+    public int randomInt(int max) {
+    Random r = new Random();
+        return r.nextInt(max + 1);
     }
 
-    public static void testBranch() {
-        Branch b = new Branch(20);
-        
-        //System.out.println("Color: " + b.color);
-        System.out.println("Seq: " + b.seq());
-        System.out.println("hasNext: " + b.hasNext());
-        System.out.println("here: " + b.here());
-        System.out.println("next: " + b.next());
-        
-        System.out.println("howMany1: " + b.howMany(10));
-    	System.out.println("howMany2: " + b.howMany(20));
-        System.out.println("empty: " + b.empty());
-        System.out.println("isEmpty: " + b.isEmpty());
-        System.out.println("cardinality1: " + b.cardinality());
-        System.out.println("cardinality1: " + b.add(20).cardinality());
-        System.out.println("member1: " + b.member(10));
-        System.out.println("member2: " + b.member(20));
- 
-        System.out.println("add1: " + b.add(10));
-        System.out.println("add2: " + b.add(20));
-        System.out.println("add3: " + b.add(20).add(10));
+    public Character randomChar() {
+	String alphabet = "abcdefghijklmnopqrstuvwxyz";
+	int n = alphabet.length();
+	Random r = new Random();
+	return Character.valueOf(alphabet.charAt(r.nextInt(n)));
+    }
 
-        System.out.println("remove1: " + b.remove(10));
-        System.out.println("remove2: " + b.remove(20));
-        System.out.println("remove3: " + b.add(10).remove(10));
-        
-        System.out.println("union1: " + b.union(b));
-        System.out.println("union2: " + b.union(b.add(10)));
-        
-        System.out.println("inter1: " + b.inter(b.add(10)));
-        System.out.println("inter2: " + b.inter(b.add(20)));
-        
-        System.out.println("diff1: " + b.diff(b));
-        System.out.println("diff2: " + b.diff(b.add(10)));
-        System.out.println("diff2: " + (b.add(10)).diff(b));
+    public PFB bagOfInt(int size) {
+        if (size == 0)
+            return new Leaf();
+	else
+            return bagOfInt(size-1).add(Integer.valueOf(randomInt(100)));
+    }
 
-	    System.out.println("equal1: " + b.equal(b));
-	    System.out.println("equal2: " + b.equal(b.add(10)));
-	    System.out.println("equal3: " + b.equal(b.add(10).remove(10)));
-        
-        System.out.println("\nsubset1: " + b.subset(b));
-        System.out.println("subset2: " + b.subset(b.add(10)));
-        System.out.println("subset2: " + (b.add(10)).subset(b));
+    public PFB bagOfChar(int size) {
+        if (size == 0)
+            return new Leaf();
+	else
+            return bagOfChar(size-1).add(randomChar());
+    }
+
+    public PFB randomBag(int size) {
+	int coin = randomInt(1);
+	if (coin == 0)
+	    return bagOfInt(randomInt(20));
+	else
+	    return bagOfChar(randomInt(20));
+    }
+
+
+    // Methods to check properties
+
+    public static void check_howMany() {
+    }
+
+    public static void check_empty() {
+    }
+
+    public static void check_isEmpty() {
     }
     
+    public static void check_cardinality() {
+    }
+
+    public static void check_member() {
+    }
+
+    public static void check_add() {
+    }
+
+    public static void check_remove() {
+    }
+
+    public static void check_union() {
+    }
+
+    public static void check_inter() {
+    }
+
+    public static void check_diff() {
+    }
+
+    public static void check_equal() {
+    }
+
+    public static void check_subset() {
+    }
+
+
+    public static void check_seq() {
+    }
+
+    public static void check_here() {
+    }
+
+    public static void check_hasNext() {
+    }
+
+    public static void check_next() {
+    }
+
+
     public static void main(String[] args) {
         System.out.println("Let's get this party started!");
         
-        System.out.println("---------- LEAF ----------");
-        testLeaf();
-        System.out.println("---------- BRANCH ----------");
-        testBranch();
+	// Check properties of Polymorphic Finite Bag
+        check_howMany();
+	check_empty();
+	check_isEmpty();
+	check_cardinality();
+	check_member();
+	check_add();
+	check_remove();
+	check_union();
+	check_inter();
+	check_diff();
+	check_equal();
+	check_subset();
+
+	// Check properties of Sequence
+	check_seq();
+	check_here();
+	check_hasNext();
+	check_next();
+
+	// Check properties of Red-black Tree
+	// ...
     }
 
 }
