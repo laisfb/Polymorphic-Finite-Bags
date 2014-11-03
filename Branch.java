@@ -1,9 +1,8 @@
-enum Color { black, red };
-
 class Branch<T extends Comparable> implements PFB<T> {
     public T datum;
     public int count;
     
+    public enum Color { black, red };
     public Color color = Color.black;
     //public Branch<T> parent;
     
@@ -17,6 +16,14 @@ class Branch<T extends Comparable> implements PFB<T> {
         //this.color = Color.black;
         //this.parent = null;
         
+        this.left = new Leaf<T>();
+    	this.right = new Leaf<T>();
+    }
+    
+    Branch(T elem, int count) {
+        this.datum = elem;
+        this.count = count;
+                
         this.left = new Leaf<T>();
     	this.right = new Leaf<T>();
     }
@@ -53,16 +60,6 @@ class Branch<T extends Comparable> implements PFB<T> {
     	this.right = right;
     }
     */
-    
-    public Color getColor() {
-        return this.color;
-    }
-    
-    public void setColor(Color c) {
-        this.color = c;
-    }
-
-
     
     public GSequence seq() {
 	return this;
@@ -146,40 +143,15 @@ class Branch<T extends Comparable> implements PFB<T> {
         */
     }
 
-    public PFB<T> generateBranch(T elem, PFB<T> parent) {
-	/*
-        if (elem.equals(this.datum)) {
-	    Branch b = new Branch(this.datum, this.count+1, this.parent,
-                                    this.left, this.right);
-	    b.color = this.color;
-	    return b;
-        }
-        
-        else if (elem.compareTo(this.datum) < 0) // elem < datum
-	    return this.left.generateBranch(elem, this);
-    	    
-    	else // elem > datum
-	    return this.right.generateBranch(elem, this);
-	*/
-	return this;
-    }
-
-    public PFB<T> add(T elem, PFB<T> parent) {
-	/*
-        if (elem.equals(this.datum)) {
-	    Branch b = new Branch(this.datum, this.count+1, this.parent,
-                                    this.left, this.right);
-	    b.color = this.color;
-	    return b;
-        }
-        
-        else if (elem.compareTo(this.datum) < 0) // elem < datum
-	    return new Branch(this.datum, this.count, this, this.left.add(elem, this), right);
-    	    
-    	else // elem > datum
-    	    return new Branch(this.datum, this.count, this, this.left, this.right.add(elem, this));
-	*/
-	return this;
+    public PFB<T> addMany(T elem, int n) {
+	if (elem.equals(this.datum))
+	    return new Branch(this.datum, (this.count+n), this.left, this.right);
+	
+	else if (elem.compareTo(this.datum) < 0)
+	    return new Branch(this.datum, this.count, this.left.addMany(elem,n), this.right);
+	    
+	else
+	    return new Branch(this.datum, this.count, this.left, this.right.addMany(elem,n));
     }
     
     public PFB<T> remove(T elem) {
@@ -198,13 +170,13 @@ class Branch<T extends Comparable> implements PFB<T> {
     
     public PFB<T> union(PFB<T> b) {
 	// ((left U right) U b) + datum
-	return (((this.left).union(this.right)).union(b)).add(this.datum);
+	return (((this.left).union(this.right)).union(b)).addMany(this.datum, this.count);
     }
 
     // Union of both intersections
     public PFB<T> inter(PFB<T> b) {
 	if(b.member(this.datum))
-	    return  (b.inter(this.left)).union(b.inter(this.right)).add(this.datum);
+	    return  (b.inter(this.left)).union(b.inter(this.right)).addMany(this.datum, this.count);
 	else
 	    return (b.inter(this.left)).union(b.inter(this.right));
     }
