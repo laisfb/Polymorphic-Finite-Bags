@@ -1,30 +1,13 @@
-class Leaf<T extends Comparable> implements PFB<T> {
+class Leaf<T extends Comparable> implements PFB<T>, Sequence<T> {
     public Color color;
     
     Leaf() {
         this.color = Color.black; // By definition, all leaves are black
     }
     
-    public GSequence seq() {
-	return this;
+    public GSequence<T> seq() {
+	return new EmptySequence<T>();
     }
-    
-    public boolean hasNext() {
-	return false;
-    }
-    
-    // here() is not supposed to be
-    // called unless isEmpty is false
-    public T here() {
-	throw new RuntimeException("There are no elements in this bag");
-    }
-    
-    // next() is not supposed to be
-    // called unless hasNext is true
-    public GSequence<T> next() {
-	throw new RuntimeException("There are nothing after this bag");
-    }
-
     
     public int howMany(T elem) {
 	return 0;
