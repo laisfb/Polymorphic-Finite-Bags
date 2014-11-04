@@ -1,13 +1,15 @@
-interface Sequence<T> {
-    public GSequence seq();
+interface Sequence<T extends Comparable> {
+    public GSequence<T> seq();
 }
 
-interface GSequence<T> {
+interface GSequence<T extends Comparable> extends Sequence<T> {
     public T here();
     public boolean hasNext();
     public GSequence<T> next();
     // If hasNext() returns false, then here()
     // and next() can return anything
+
+    public String toString();
 }
 
 // PFB stands for Polymorphic Finite Bags
