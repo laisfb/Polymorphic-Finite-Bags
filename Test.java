@@ -1,4 +1,4 @@
-	import java.util.Random;
+import java.util.Random;
 
 public class Test {
 
@@ -32,7 +32,7 @@ public class Test {
         }
     }
 
-    public static PFB newBag(int size) {
+    public static PFB randomBag(int size) {
 	int coin = randomInt(1);
 	if (coin == 0)
 	    return bagOfInt(size);
@@ -42,10 +42,11 @@ public class Test {
 
     public static PFB randomBag() {
 	int size = randomInt(20);
-	if (size == 0)
-	    return new Leaf();
+	int coin = randomInt(1);
+	if (coin == 0)
+	    return bagOfInt(size);
 	else
-	    return newBag(size);
+	    return bagOfChar(size);
     }
 
 
@@ -74,15 +75,15 @@ public class Test {
 
     public static void check_isEmpty() {
 	int size = randomInt(20);
-	PFB b = newBag(size);
+	PFB b = randomBag(size);
 	if ( (size == 0 && !b.isEmpty() ) ||
-	     (size > 0  &&  b.isEmpty() ) )
+	     (size  > 0 &&  b.isEmpty() ) )
 	    throw new RuntimeException("ERROR IN: check_isEmpty");
     }
     
     public static void check_cardinality() {
 	int size = randomInt(20);
-	PFB b = newBag(size);
+	PFB b = randomBag(size);
 	if ( b.cardinality() != size )
 	    throw new RuntimeException("ERROR IN: check_cardinality");
     }
@@ -180,44 +181,59 @@ public class Test {
     }
 
 
-    public static void check_seq() {
-    }
-
     public static void check_here() {
+	int size = randomInt(20) + 1; // size >=1
+	Branch b = (Branch)randomBag(size);
+	if (b.datum != b.seq().here())
+	    throw new RuntimeException("ERROR IN: check_here");
     }
 
     public static void check_hasNext() {
+	// If it empty, it can't have "next"
+	// If it's not empty, it must have a "next"
+	PFB b = randomBag();      
+	if (b.isEmpty() ==  b.seq().hasNext())
+	    throw new RuntimeException("ERROR IN: check_hasNext");
     }
 
     public static void check_next() {
+	PFB b = randomBag();
+	if ( (!b.seq().hasNext() && b.seq().next() != null ) ||
+	     ( b.seq().hasNext() && b.seq().next() == null ) )
+	    throw new RuntimeException("ERROR IN: check_next");
     }
 
 
     public static void main(String[] args) {
         System.out.println("Let's get this party started!");
         
-	// Check properties of Polymorphic Finite Bag
-        check_howMany();
-	check_empty();
-	check_isEmpty();
-	check_cardinality();
-	check_member();
-	check_add();
-	check_remove();
-	check_union();
-	check_inter();
-	check_diff();
-	check_equal();
-	check_subset();
+	int i;
+	for (i=0; i<50; i++) {
+	    // Check properties of Polymorphic Finite Bag
+	    check_howMany();
+	    check_empty();
+	    check_isEmpty();
+	    check_cardinality();
+	    check_member();
+	    check_add();
+	    check_remove();
+	    check_union();
+	    check_inter();
+	    check_diff();
+	    check_equal();
+	    check_subset();
 
-	// Check properties of Sequence
-	check_seq();
-	check_here();
-	check_hasNext();
-	check_next();
+	    // Check properties of Sequence
+	    check_here();
+	    check_hasNext();
+	    check_next();
 
-	// Check properties of Red-black Tree
-	// ...
-    }
+	    // Check properties of Red-black Tree
+	    // ...
+	}
+
+        System.out.println("All tests passed " + i + " times!");
+
+     }
 
 }
