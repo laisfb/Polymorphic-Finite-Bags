@@ -1,4 +1,4 @@
-class Branch<T extends Comparable> implements PFB<T> {
+class Branch<T extends Comparable> implements PFB<T>, Sequence<T> {
     public T datum;
     public int count;
     
@@ -61,24 +61,11 @@ class Branch<T extends Comparable> implements PFB<T> {
     }
     */
     
-    public GSequence seq() {
-	return this;
-    }
-    
-    public boolean hasNext() {
-    	return !(left.isEmpty() && right.isEmpty());
-    }
-    
-    public T here() {
-	return this.datum;
-    }
-    
-    public GSequence<T> next() {
-	return (this.left).union(this.right);
+    public GSequence<T> seq() {
+	return new NonEmptySequence<T>(this.datum, this.count, (this.left).seq(), (this.right).seq());
     }
 
 
-    
     public int howMany(T elem) {
         if (elem.equals(this.datum)) {
 	    return this.count;
@@ -209,9 +196,8 @@ class Branch<T extends Comparable> implements PFB<T> {
     
     public String toString() {
         return 
-        	"( " + this.datum + " , " + this.count + " )\n" +
-        	"  " + this.left + "\n" +
-        	"  " + this.right;
+        	" ( " + this.datum + " , " + this.count + " )\n" +
+        	this.left + "\n" + this.right;
     }
     
     
