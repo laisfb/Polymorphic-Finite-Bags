@@ -1,4 +1,4 @@
-class Branch<T extends Comparable> implements PFB<T> {
+class Branch<T extends Comparable> implements PFB<T>, Sequence<T> {
     public T datum;
     public int count;
     
@@ -183,7 +183,7 @@ class Branch<T extends Comparable> implements PFB<T> {
 	if(b.cardinality() != this.cardinality())
 	    return false;
 	else
-	    // If heir  difference between them is
+	    // If their difference between them is
 	    return (this.diff(b)).isEmpty();
     }
     

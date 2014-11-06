@@ -207,7 +207,7 @@ public class Test {
 	PFB inter34 = b3.inter(b4);
 	Character c = randomChar();
 
-	if ( (b3.member(c) && b4.member(c)) && !inter34.member(c) )
+	if ( (b2.member(c) && b3.member(c)) && !inter.member(c) )
 	    throw new RuntimeException("ERROR IN: check_inter");
 	
     }
@@ -217,8 +217,9 @@ public class Test {
 	// If an element is a member of T, but not a member of S
 	// it should be a member of  S.diff(T)
 
-	// The cardinality of the difference can't be greater
-	// than the cardinality of T
+	// The cardinality and the "howMany" of each element of 
+	// S.diff(T) must be exactly the difference between those 
+	// values of T and S
 
 	int size1 = randomInt(20);
 	int size2 = randomInt(20);
@@ -227,19 +228,21 @@ public class Test {
 	PFB diff12 = b1.diff(b2);
 	int x = randomInt(100);
 	
-	if ( ((b2.member(x) && !b1.member(x)) && !diff12.member(x)) ||
-	     !(diff12.cardinality() <= b2.cardinality()) )
-	    throw new RuntimeException("ERROR IN: check_diff");
-    
+	if ( (b2.member(x) && !b1.member(x)) && !diff.member(x))
+	     (diff12.cardinality() != (b2.cardinality() - b1.cardinality())) ||
+	     (diff12.howMany(x) != (b2.howMany(x) - b1.howMany(x))) )
+	    throw new RuntimeException("ERROR IN: check_union");
+
 
 	PFB b3 = bagOfChar(size1);
 	PFB b4 = bagOfChar(size2);
 	PFB diff34 = b3.diff(b4);
 	Character c = randomChar();
 	
-	if ( ((b4.member(c) && !b3.member(c)) && !diff34.member(c)) ||
-	     !(diff34.cardinality() <= b4.cardinality())  )
-	    throw new RuntimeException("ERROR IN: check_diff");
+	if ( (b4.member(c) && !b3.member(c)) && !diff.member(c))
+	     (diff34.cardinality() != (b4.cardinality() - b3.cardinality())) ||
+	     (diff34.howMany(c) != (b4.howMany(c) - b3.howMany(c))) )
+	    throw new RuntimeException("ERROR IN: check_union");
     }
 
     public static void check_equal() {
@@ -283,7 +286,7 @@ public class Test {
 	PFB b3 = bagOfChar(size1);
 	PFB b4 = bagOfChar(size2);
 
-	if ( b3.subset(b4) && !( b3.inter(b4).diff(b3).isEmpty() ) )
+	if ( b3.subset(b4) && !( b3.inter(b4).diff(b2).isEmpty() ) )
 	    throw new RuntimeException("ERROR IN: check_subset");
 
     }
