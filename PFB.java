@@ -75,6 +75,9 @@ interface PFB<T extends Comparable> extends Sequence<T> {
     // Returns a new bag containing elem and everything in the bag
     public PFB<T> add(T elem);
     public PFB<T> addMany(T elem, int n);
+
+    public PFB<T> add(T elem, Branch<T> parent);
+    public PFB<T> addMany(T elem, int n, Branch<T> parent);
     
     // Returns a new bag containing everything in the bag, except elem
     public PFB<T> remove(T elem);

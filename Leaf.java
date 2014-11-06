@@ -37,11 +37,19 @@ class Leaf<T extends Comparable> implements PFB<T> {
     }
 
     public PFB<T> add(T elem) {
-	return new Branch<T>(elem);
+        return balanceTree(new Branch<T>(elem));
+    }
+
+    public PFB<T> add(T elem, Branch<T> parent) {
+        return balanceTree(new Branch<T>(elem, parent));
     }
 
     public PFB<T> addMany(T elem, int n) {
-	return new Branch<T>(elem, n);
+        return balanceTree(new Branch<T>(elem, n));
+    }
+
+    public PFB<T> addMany(T elem, int n, Branch<T> parent) {
+	return balanceTree(new Branch<T>(elem, n, parent));
     }
     
     public PFB<T> remove(T elem) {
@@ -71,7 +79,13 @@ class Leaf<T extends Comparable> implements PFB<T> {
 	return b.isEmpty();
     }
     
-
+    public Branch<T> balanceTree(Branch<T> b) {
+	// If it is a root node, change its color
+	if (b.parent == null)
+	    b.color = Color.black;
+	
+	return b;
+    }
 
     public String toString() {
 	//return "_";

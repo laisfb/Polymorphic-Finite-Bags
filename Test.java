@@ -316,7 +316,7 @@ public class Test {
 
     public static void main(String[] args) {
         System.out.println("Let's get this party started!");
-        
+	/*        
 	int i;
 	for (i=0; i<50; i++) {
 	    // Check properties of Polymorphic Finite Bag
@@ -341,12 +341,24 @@ public class Test {
 	    // Check properties of Red-black Tree
 	    // ...
 	}
-
+	
         System.out.println("All tests passed " + i + " times!");
-
-	PFB b = randomBag();
+	*/
+	PFB b = new Leaf();
+	System.out.println(" --- Initial Tree --- ");
 	System.out.println(b);
-
+	System.out.println(" --- Add 10 --- ");
+	b = b.add(10);
+	System.out.println(b);
+	System.out.println(" --- Add 5 and 20 --- ");
+	b = b.add(5).add(20);
+	System.out.println(b);
+	System.out.println(" --- Add 25 --- ");
+	b = b.add(25);
+	System.out.println(b);
+	System.out.println(" --- Add 22 --- ");
+	b = b.add(22);
+	System.out.println(b);
      }
 
 }
