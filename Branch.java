@@ -2,7 +2,6 @@ class Branch<T extends Comparable> implements PFB<T> {
     public T datum;
     public int count;
     
-    //public enum Color { black, red };
     public Color color = Color.red;
     public Branch<T> parent;
     
@@ -185,11 +184,28 @@ class Branch<T extends Comparable> implements PFB<T> {
 	return (this.equal(this.inter(b)));
     }
     
+
+    // ============ METHODS TO PRINT THE TREE ============
     public String toString() {
-        return 
-        	" ( " + this.datum + " , " + this.count + " )\n" +
-        	this.left + "\n" + this.right;
+        return   
+        	"( " + this.datum + " , " + this.count + " , " + this.color + " )\n" +
+	    this.left.spacing(this.space) + this.left + "\n" +
+	    this.right.spacing(this.space) + this.right;
     }
+
+
+    int space = 0;
+    public String spacing(int s) {
+	this.space = s + 2;
+	int i = 0;
+	String str = "";
+	while(i < space) {
+	    str += " ";
+	    i++;
+	}
+	return str;
+    }
+
     
     
     // ============ METHODS FOR THE RED-BLACK TREE ============

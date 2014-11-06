@@ -2,7 +2,7 @@ interface Sequence<T extends Comparable> {
     public GSequence<T> seq();
 }
 
-interface GSequence<T extends Comparable> {
+interface GSequence<T extends Comparable> extends Sequence<T> {
     public T here();
     public boolean hasNext();
     public GSequence<T> next();
@@ -42,7 +42,12 @@ interface GSequence<T extends Comparable> {
 // (either red or black), and a reference to its
 // parent (which is a Branch).
 
-interface PFB<T> extends GSequence<T>, Sequence<T> {
+enum Color { black , red };
+
+interface PFB<T extends Comparable> extends Sequence<T> {
+
+    public Color getColor();
+    public void setColor(Color c);
 
     // Returns how many of "elem" are in the bag
     public int howMany(T elem);

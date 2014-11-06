@@ -46,8 +46,14 @@ enum Color { black , red };
 
 interface PFB<T extends Comparable> extends Sequence<T> {
 
+    // Returns the color of the node
     public Color getColor();
+
+    // Changes the color of the node
     public void setColor(Color c);
+
+    // Method to make printing pretty
+    public String spacing(int space);
 
     // Returns how many of "elem" are in the bag
     public int howMany(T elem);
@@ -89,6 +95,7 @@ interface PFB<T extends Comparable> extends Sequence<T> {
     
     // Determines if the current bag is a subset of b
     public boolean subset(PFB<T> b);
+
 }
 
 // --- Some properties related to the Red-Black Tree

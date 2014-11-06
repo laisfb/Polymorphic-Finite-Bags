@@ -1,5 +1,5 @@
 class Leaf<T extends Comparable> implements PFB<T> {
-    //public enum Color { black, red };
+
     public Color color = Color.black;
 
     Leaf() {}
@@ -71,8 +71,23 @@ class Leaf<T extends Comparable> implements PFB<T> {
 	return b.isEmpty();
     }
     
+
+
     public String toString() {
-	return "_";
-	//return "( " + this.color + " )";
+	//return "_";
+	return "( " + this.color + " )";
     }
+
+    int space = 0;
+    public String spacing(int s) {
+	this.space = s + 2;
+	int i = 0;
+	String str = "";
+	while(i < space) {
+	    str += " ";
+	    i++;
+	}
+	return str;
+    }
+
 }

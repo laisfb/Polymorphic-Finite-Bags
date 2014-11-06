@@ -344,6 +344,9 @@ public class Test {
 
         System.out.println("All tests passed " + i + " times!");
 
+	PFB b = randomBag();
+	System.out.println(b);
+
      }
 
 }
