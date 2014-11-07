@@ -157,7 +157,6 @@ class Branch<T extends Comparable> implements PFB<T> {
 	if(b.cardinality() != this.cardinality())
 	    return false;
 	else
-	    // If heir  difference between them is
 	    return (this.diff(b)).isEmpty();
     }
     
@@ -258,10 +257,13 @@ class Branch<T extends Comparable> implements PFB<T> {
 	}
 
 	// Case 4 and 5: Uncle is black (meaning it could be a leaf)
-	else {	    
-	    // Left - Right
-	    if ( (b == b.parent.right) && (b.parent == g.left) ) {
+	else{
+	    
+	    // These conditions are all being evaluated to false
+	    // even when they should be true
 
+	    // Left - Right
+	    if ( (b.equal(b.parent.right)) && (b.parent.equal(g.left)) ) {
 		// Rotate Left b.parent 				
 		Branch<T> saved_right = (Branch)b.parent.right;
 		b.parent.right = saved_right.left;
@@ -271,7 +273,7 @@ class Branch<T extends Comparable> implements PFB<T> {
 	    }
 
 	    // Right - Left
-	    else if ( (b == b.parent.left) && (b.parent == g.right) ) {
+	    else if ( (b.equal(b.parent.left)) && (b.parent.equal(g.right)) ) {
 		PFB<T> saved_right = b.right;
 		Branch<T> saved_p = b.parent;
 
