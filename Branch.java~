@@ -196,17 +196,57 @@ class Branch<T extends Comparable> implements PFB<T> {
 	    return new Branch(this.datum, (this.count+1), this.color, this.parent, this.left, this.right);
 	
 	else if (elem.compareTo(this.datum) < 0) {
-	    PFB<T> b = balanceTree((Branch)this.left.add(elem, this));
-	    Branch p = ((Branch)b).parent;
+	    /*
+	    Branch<T> b = (Branch)this.left.add(elem, this);
+	    Branch<T> p = ((Branch)b).parent;
+	    p.left = b;
+
+	    b = (Branch)balanceTree(b);
 
 	    return new Branch(p.datum, p.count, p.color, p.parent, b, p.right);
+	    */
+
+	    /*
+	    Branch<T> b = (Branch)this.left.add(elem, this);
+	    Branch<T> p = new Branch(this.datum, this.count, this.color, this.parent, b, this.right);
+	    b.parent = p;
+
+	    b = (Branch)balanceTree(b);
+	    p = b.parent;
+
+	    return new Branch(p.datum, p.count, p.color, p.parent, b, p.right);
+	    */
+	    return new Branch(this.datum, this.count, this.color, this.parent, 
+			      this.left.add(elem, this), this.right);
 	}
 	    
 	else {
-	    PFB<T> b = balanceTree((Branch)this.right.add(elem, this));
-	    Branch p = ((Branch)b).parent;
+	    /*
+	    Branch<T> b = (Branch)this.right.add(elem, this);
+	    Branch<T> p = ((Branch)b).parent;
+	    p.right = b;
+
+	    b = (Branch)balanceTree(b);
 
 	    return new Branch(p.datum, p.count, p.color, p.parent, p.left, b);
+	    */
+
+	    /*
+	    Branch<T> b = (Branch)this.right.add(elem, this);
+	    System.out.println("B: " + b);
+	    Branch<T> p = new Branch(this.datum, this.count, this.color, this.parent, this.left, b);
+	    b.parent = p;
+
+	    System.out.println("B: " + b);
+	    b = (Branch)balanceTree(b);
+	    System.out.println("Balanced b: " + b);
+	    p = b.parent;
+	    
+	    return new Branch(p.datum, p.count, p.color, p.parent, p.left, b);
+	    */
+
+	    return new Branch(this.datum, this.count, this.color, this.parent, 
+			      this.left, this.right.add(elem, this));
 	}
     }
 
@@ -263,30 +303,42 @@ class Branch<T extends Comparable> implements PFB<T> {
 	    // even when they should be true
 
 	    // Left - Right
+
 	    if ( (b.equal(b.parent.right)) && (b.parent.equal(g.left)) ) {
-		// Rotate Left b.parent 				
-		Branch<T> saved_right = (Branch)b.parent.right;
-		b.parent.right = saved_right.left;
-		saved_right.left = b.parent;
+
+		// Rotate Left b.parent 		        
+
+		PFB<T> saved_left = b.left;
+		Branch<T> saved_p = b.parent;
+
+		g.left = b;
+		b.parent.right = saved_left;
+		b.left = saved_p;
+		saved_p = g.parent;
 
 		b = (Branch)b.left;
+
 	    }
 
 	    // Right - Left
 	    else if ( (b.equal(b.parent.left)) && (b.parent.equal(g.right)) ) {
+		System.out.println("RL");
 		PFB<T> saved_right = b.right;
 		Branch<T> saved_p = b.parent;
 
 		g.right = b;
 		b.parent.left = saved_right;
 		b.right = saved_p;
-	    }
+		b.parent = g.parent;
 
-	    /*
+		b = (Branch)b.right;
+
+	    }
 
 	    // Case 5:
 	    // Left - Left or Right - right
-
+	    
+	    /*
 	    b.parent.color = Color.black;
 	    g.color = Color.red;
 	    
@@ -304,7 +356,6 @@ class Branch<T extends Comparable> implements PFB<T> {
 		saved_right.left = g;
 	    }
 	    */
-	
 	    return b;
 	}
     }
@@ -320,7 +371,7 @@ class Branch<T extends Comparable> implements PFB<T> {
         Branch<T> g = grandparent();
         if (g == null)
 	    return null;
-        else if (this.parent.equals(g.left))
+        else if (this.parent.equal(g.left))
 	    return g.right;
         else
 	    return g.left;

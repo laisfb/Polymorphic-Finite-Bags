@@ -99,6 +99,9 @@ class Branch<T extends Comparable> implements PFB<T> {
     public boolean member(T elem) {
 	if (elem.equals(this.datum) && this.count >= 1)
 	    return true;
+
+	else if (elem.equals(this.datum) && this.count == 0)
+	    return false;
 	
 	else if (elem.compareTo(this.datum) < 0)
 	    return this.left.member(elem);
@@ -255,17 +258,25 @@ class Branch<T extends Comparable> implements PFB<T> {
 	    return new Branch(this.datum, (this.count+n), this.color,  this.parent, this.left, this.right);
 	
 	else if (elem.compareTo(this.datum) < 0) {
+	    /*
 	    PFB<T> b = balanceTree((Branch)this.left.addMany(elem, n, this));
 	    Branch p = ((Branch)b).parent;
 
 	    return new Branch(p.datum, p.count, p.color, p.parent, b, p.right);
+	    */
+	    return new Branch(this.datum, this.count, this.color, this.parent, 
+			      this.left.addMany(elem, n, this), this.right);
 	}
 
 	else {
+	    /*
 	    PFB<T> b = balanceTree((Branch)this.right.addMany(elem, n, this));
 	    Branch p = ((Branch)b).parent;
 
 	    return new Branch(p.datum, p.count, p.color, p.parent, p.left, b);
+	    */
+	    return new Branch(this.datum, this.count, this.color, this.parent, 
+			      this.left, this.right.addMany(elem, n, this));
 	}
     }
 

@@ -4,6 +4,10 @@ class EmptySequence<T extends Comparable> implements GSequence<T> {
     // If hasNext() returns false, then here()
     // and next() can return anything
 
+    public GSequence<T> seq() {
+	return this;
+    }
+
     public T here() {
 	return null;
 	//throw new RuntimeException("There are no elements in this sequence");
@@ -37,6 +41,10 @@ class NonEmptySequence<T extends Comparable> implements GSequence<T> {
 	this.right = right;
     }
 
+    public GSequence<T> seq() {
+	return this;
+    }
+
     public T here() {
 	return this.datum;
     }
@@ -51,7 +59,8 @@ class NonEmptySequence<T extends Comparable> implements GSequence<T> {
 
 	else if (this.left instanceof NonEmptySequence)
 	    return new NonEmptySequence(((NonEmptySequence)(this.left)).datum,
-					 1, this.left.next(), this.right);
+					 1,
+					 this.left.next(), this.right);
 
 	else
 	    return this.right;

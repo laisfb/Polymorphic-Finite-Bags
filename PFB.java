@@ -2,7 +2,7 @@ interface Sequence<T extends Comparable> {
     public GSequence<T> seq();
 }
 
-interface GSequence<T extends Comparable> extends Sequence<T> {
+interface GSequence<T extends Comparable> {
     public T here();
     public boolean hasNext();
     public GSequence<T> next();
@@ -28,11 +28,10 @@ interface GSequence<T extends Comparable> extends Sequence<T> {
 // In this case, a red-black tree will be used.
 // Since a PFB can have many of the same element,
 // the right tree can contain elements greater
-// than or equal to the node, and the left tree
-// can contain elements less than or equal to
-// the node. When a repeated element is inserted,
-// it will choose a side that won't "unbalance"
-// the tree.
+// than to the node, and the left tree can 
+// contain elements less than the node. When a 
+// repeated element is inserted, it will increase
+// the counter of that element.
 
 // Also, a PFB can be two things: either a Leaf
 // or a Branch. A Leaf is just a representation
