@@ -109,16 +109,18 @@ public class Test {
 	PFB b1 = bagOfInt(randomInt(20));
 	int x = randomInt(100);
 	int y = randomInt(100);
-	if ( b1.add(x).cardinality() != (b1.cardinality() + 1) )
+	if ( (b1.cardinality() + 1) != b1.add(x).cardinality() )
 	    throw new RuntimeException("ERROR IN: check_add");
+
 	if ( b1.add(x).member(y) && !(b1.member(y) || x == y) )
 	    throw new RuntimeException("ERROR IN: check_add");
 
 	PFB b2 = bagOfChar(randomInt(20));
 	Character c = randomChar();
 	Character d = randomChar();
-	if ( b2.add(c).cardinality() != (b2.cardinality() + 1) )
+	if ( (b2.cardinality() + 1) != b2.add(c).cardinality() )
 	    throw new RuntimeException("ERROR IN: check_add");
+	
 	if ( b2.add(c).member(d) && !(b2.member(d) || c == d) )
 	    throw new RuntimeException("ERROR IN: check_add");
     }
@@ -128,7 +130,7 @@ public class Test {
 	int x = randomInt(100);
 	int y = randomInt(100);
 	int m = randomInt(10);
-	if ( b1.addMany(x,m).cardinality() != (b1.cardinality() + m) )
+	if ( (b1.cardinality() + m) !=  b1.addMany(x,m).cardinality())
 	    throw new RuntimeException("ERROR IN: check_add");
 	if ( b1.addMany(x,m).member(y) && !(b1.member(y) || x == y) )
 	    throw new RuntimeException("ERROR IN: check_add");
@@ -137,7 +139,7 @@ public class Test {
 	Character c = randomChar();
 	Character d = randomChar();
 	int n = randomInt(10);
-	if ( b2.addMany(c,n).cardinality() != (b2.cardinality() + n) )
+	if ( (b2.cardinality() + n) != b2.addMany(c,n).cardinality() )
 	    throw new RuntimeException("ERROR IN: check_add");
 	if ( b2.addMany(c,n).member(d) && !(b2.member(d) || c == d) )
 	    throw new RuntimeException("ERROR IN: check_add");
@@ -190,10 +192,11 @@ public class Test {
 	int x = randomInt(100);
 	
 	if ( (union12.cardinality() != (b1.cardinality() + b2.cardinality())) ||
-	     (union12.howMany(x) != (b1.howMany(x) + b2.howMany(x))) ||
-	     ((!b1.member(x) && b2.member(x)) && !union12.member(x)) )
+	     ((!b1.member(x) && b2.member(x)) && !union12.member(x)) ) {
+	    System.out.println("U: " + union12.cardinality());
+	    System.out.println("U: " + (b1.cardinality() + b2.cardinality()));
 	    throw new RuntimeException("ERROR IN: check_union");
-
+	}
 
 
 	PFB b3 = bagOfChar(size1);
@@ -202,7 +205,6 @@ public class Test {
 	Character c = randomChar();
 	
 	if ( (union34.cardinality() != (b3.cardinality() + b4.cardinality())) ||
-	     (union34.howMany(c) != (b3.howMany(c) + b4.howMany(c))) ||
 	     ((!b3.member(c) && b4.member(c)) && !union34.member(c)) )
 	    throw new RuntimeException("ERROR IN: check_union");
 
@@ -336,10 +338,18 @@ public class Test {
 	    throw new RuntimeException("ERROR IN: check_next");
     }
 
+    public static void check_rbt() {
+	int size = randomInt(20);
+	PFB b = bagOfInt(size);
+	
+	if ( b.getColor() != Color.black )
+	    throw new RuntimeException("ERROR IN: check_color");
+
+    }
 
     public static void main(String[] args) {
         System.out.println("Let's get this party started!");
-	       
+	
 	int i;
 	for (i=0; i<50; i++) {
 	    // Check properties of Polymorphic Finite Bag
@@ -363,26 +373,13 @@ public class Test {
 	    check_next();
 
 	    // Check properties of Red-black Tree
-	    // ...
+	    check_rbt();
 	}
 	
         System.out.println("All tests passed " + i + " times!");
 	
-	PFB b = new Leaf();
-	System.out.println(" --- Initial Tree --- ");
-	System.out.println(b);
-	System.out.println(" --- Add 10 --- ");
-	b = b.addMany(10,2);
-	System.out.println(b);
-	System.out.println(" --- Add 5 and 20 --- ");
-	b = b.addMany(5,3).add(20);
-	System.out.println(b);
-	System.out.println(" --- Add 25 --- ");
-	b = b.addMany(25,2);
-	System.out.println(b);
-	System.out.println(" --- Add 22 --- ");
-	b = b.addMany(22,4);
-	System.out.println(b.seq());
+	System.out.println(randomBag());
+
      }
 
 }
