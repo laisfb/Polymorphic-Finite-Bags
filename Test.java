@@ -309,7 +309,6 @@ public class Test {
 
 	if ( b3.subset(b4) && !( b3.inter(b4).diff(b3).isEmpty() ) )
 	    throw new RuntimeException("ERROR IN: check_subset");
-
     }
 
     // Tests for sequences
@@ -338,20 +337,56 @@ public class Test {
 	    throw new RuntimeException("ERROR IN: check_next");
     }
 
-    public static void check_rbt() {
-	int size = randomInt(20);
-	PFB b = bagOfInt(size);
-	
-	if ( b.getColor() != Color.black )
-	    throw new RuntimeException("ERROR IN: check_color");
+    // Tests for red-black tree
 
+    public static void check_color() {
+	check_color(randomBag());
+    }
+
+    public static void check_color(PFB b) {
+
+	if (b.isEmpty()) {
+	    if (b.getColor() != Color.black)
+		throw new RuntimeException("ERROR IN: check_color");
+	}
+	else {
+	    if( ((Branch)b).parent == null && !(b.getColor() == Color.black))
+		throw new RuntimeException("ERROR IN: check_color");
+
+	    PFB left = ((Branch)b).left;
+	    PFB right = ((Branch)b).right;
+
+	    if ( !(b.getColor() == Color.black || b.getColor() == Color.red) )
+		throw new RuntimeException("ERROR IN: check_color");
+	    
+	    check_color(left);
+	    check_color(right);
+	}
+    }
+
+    public static void check_child() {
+	check_child(randomBag());
+    }
+
+    public static void check_child(PFB b) {
+	if (!b.isEmpty()) {
+	    PFB left = ((Branch)b).left;
+	    PFB right = ((Branch)b).right;
+
+	    if(  b.getColor() == Color.red &&
+		(left.getColor() == Color.red || right.getColor() == Color.red))
+		throw new RuntimeException("ERROR IN: check_child");
+	    
+	    check_child(left);
+	    check_child(right);
+	}
     }
 
     public static void main(String[] args) {
         System.out.println("Let's get this party started!");
 	
 	int i;
-	for (i=0; i<50; i++) {
+	for (i=0; i<100; i++) {
 	    // Check properties of Polymorphic Finite Bag
 	    check_howMany();
 	    check_empty();
@@ -373,13 +408,10 @@ public class Test {
 	    check_next();
 
 	    // Check properties of Red-black Tree
-	    check_rbt();
+	    check_color();
+	    check_child();
 	}
 	
         System.out.println("All tests passed " + i + " times!");
-	
-	System.out.println(randomBag());
-
      }
-
 }

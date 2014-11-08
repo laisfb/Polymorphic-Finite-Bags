@@ -195,124 +195,127 @@ class Branch<T extends Comparable> implements PFB<T> {
 
     // ============ METHODS FOR THE RED-BLACK TREE 2 ============
     
-        public PFB<T> add(T elem, Branch<T> parent) {
-	    if (elem.equals(this.datum))
-		return new Branch(this.datum, (this.count+1), this.color, this.parent, this.left, this.right);
+    public PFB<T> add(T elem, Branch<T> parent) {
+	if (elem.equals(this.datum))
+	    return new Branch(this.datum, (this.count+1), this.color, this.parent, this.left, this.right);
 	
-	    else if (elem.compareTo(this.datum) < 0) {
-		Branch<T> b = new Branch(this.datum, this.count, this.color, this.parent, 
-					 ((Branch)this.left.add(elem,this)).balance(), this.right);
-		return b.balance();
-	    }
-	    
-	    else {  
-		Branch<T> b = new Branch(this.datum, this.count, this.color, this.parent,
-					 this.left, ((Branch)this.right.add(elem,this)).balance());
-		return b.balance();
-	    }
+	else if (elem.compareTo(this.datum) < 0) {
+	    Branch<T> b = new Branch(this.datum, this.count, this.color, this.parent, 
+				     ((Branch)this.left.add(elem,this)).balance(), this.right);
+	    return b.balance();
 	}
+	    
+	else {  
+	    Branch<T> b = new Branch(this.datum, this.count, this.color, this.parent,
+				     this.left, ((Branch)this.right.add(elem,this)).balance());
+	    return b.balance();
+	}
+    }
 
-        public PFB<T> addMany(T elem, int n, Branch<T> parent) {
-	    if (elem.equals(this.datum))
-		return new Branch(this.datum, (this.count+n), this.color, this.parent, this.left, this.right);
+    public PFB<T> addMany(T elem, int n, Branch<T> parent) {
+	if (elem.equals(this.datum))
+	    return new Branch(this.datum, (this.count+n), this.color, this.parent, this.left, this.right);
 	
-	    else if (elem.compareTo(this.datum) < 0) {
-		Branch<T> b = new Branch(this.datum, this.count, this.color, this.parent, 
-					 ((Branch)this.left.addMany(elem,n,this)).balance(), this.right);
-		return b.balance();
-	    }
-	    
-	    else {  
-		Branch<T> b = new Branch(this.datum, this.count, this.color, this.parent,
-					 this.left, ((Branch)this.right.addMany(elem,n,this)).balance());
-		return b.balance();
-	    }
+	else if (elem.compareTo(this.datum) < 0) {
+	    Branch<T> b = new Branch(this.datum, this.count, this.color, this.parent, 
+				     ((Branch)this.left.addMany(elem,n,this)).balance(), this.right);
+	    return b.balance();
 	}
-
-	public PFB<T> balance() { 
+	
+	else {  
+	    Branch<T> b = new Branch(this.datum, this.count, this.color, this.parent,
+				     this.left, ((Branch)this.right.addMany(elem,n,this)).balance());
+	    return b.balance();
+	}
+    }
+    
+    public PFB<T> balance() { 
+	
+	// Case 1: root node
+	Branch<T> p = this.parent;
+	if (p == null)
+	    this.color = Color.black;
+	
+	// Case 2: both children are black
+	if (this.left.getColor() == Color.black && this.right.getColor() == Color.black)
+	    return this;
+	
+	// Case 3: both children are red
+	else if (this.left.getColor() == Color.red && this.right.getColor() == Color.red) {
 	    
-	    // Case 1: root node
-	    Branch<T> p = this.parent;
-	    if (p == null)
-		this.color = Color.black;
-
-	    // Case 2: both children are black
-	    if (this.left.getColor() == Color.black && this.right.getColor() == Color.black)
+	    // Case 3a: all grandchildren are black
+	    Branch<T> L = (Branch)this.left;
+	    Branch<T> R = (Branch)this.right;
+	    if ( L.left.getColor() == Color.black && L.right.getColor() == Color.black &&
+		 R.left.getColor() == Color.black && R.right.getColor() == Color.black )
 		return this;
 	    
-	    // Case 3: both children are red
-	    else if (this.left.getColor() == Color.red && this.right.getColor() == Color.red) {
-
-		// Case 3a: all grandchildren are black
-		Branch<T> L = (Branch)this.left;
-		Branch<T> R = (Branch)this.right;
-		if ( L.left.getColor() == Color.black && L.right.getColor() == Color.black &&
-		     R.left.getColor() == Color.black && R.right.getColor() == Color.black )
-		    return this;
-		
-		// Case 3b: some grandchild is red
-		this.left.setColor(Color.black);
-		this.right.setColor(Color.black);
-		this.color = Color.red;
-		return this.balance();
-	    }
-
-	    // Case 4: one child is red, the other is black
-	    else {
-		// Case 4a: left child is red
-		if (this.left.getColor() == Color.red) {
-		    PFB<T> LR = ((Branch)this.left).right;
-		    
-		    // Case 4a': its right child is red
-		    if (LR.getColor() == Color.red) {
-			// Rotate Child Left
-			Branch<T> old_left = (Branch)this.left;
-			this.left = LR;
-			old_left.right = ((Branch)LR).left;
-			((Branch)LR).left = old_left;
-		    }
-
-
-		    PFB<T> LL = ((Branch)this.left).left;
-		    if (LL.getColor() == Color.red) {
-			this.color = Color.red;
-			this.left.setColor(Color.black);
-			// Rotate Right
-			Branch<T> old_left = (Branch)this.left;
-			this.left = old_left.right;
-			old_left.parent = this.parent;
-			old_left.right = this;
-			return old_left.balance();
-		    }
-		    
-		}
-		
-		// Case 4b: right child is red
-		if (this.right.getColor() == Color.red ) {
-		    PFB<T> RL = ((Branch)this.right).left;
-		    
-		    if (RL.getColor() == Color.red) {
-			// Rotate Child Right
-			Branch<T> old_right = (Branch)this.right;
-			this.right = RL;
-			old_right.left = ((Branch)RL).right;
-			((Branch)RL).right = old_right;
-		    }
-		    
-
-		    PFB<T> RR = ((Branch)this.right).right;
-		    if (RR.getColor() == Color.red) {
-			this.color = Color.red;
-			this.right.setColor(Color.black);
-			// Rotate Left
-			Branch<T> old_right = (Branch)this.right;
-			this.right = old_right.left;
-			old_right.parent = this.parent;
-			old_right.left = this;
-			return old_right.balance();
-		    }
-		}
-		return this;
-	    }
+	    // Case 3b: some grandchild is red
+	    this.left.setColor(Color.black);
+	    this.right.setColor(Color.black);
+	    this.color = Color.red;
+	    return this.balance();
 	}
+	
+	// Case 4: one child is red, the other is black
+	else {
+	    // Case 4a: left child is red
+	    if (this.left.getColor() == Color.red) {
+		PFB<T> LR = ((Branch)this.left).right;
+		
+		// Case 4a': its right child is red
+		if (LR.getColor() == Color.red) {
+		    // Rotate Child Left
+		    Branch<T> old_left = (Branch)this.left;
+		    this.left = LR;
+		    old_left.right = ((Branch)LR).left;
+		    ((Branch)LR).left = old_left;
+		}
+		
+		
+		PFB<T> LL = ((Branch)this.left).left;
+		if (LL.getColor() == Color.red) {
+		    //	this.color = Color.red;
+		    //this.left.setColor(Color.black);
+		    
+		    // Rotate Right
+		    Branch<T> old_left = (Branch)this.left;
+		    this.left = old_left.right;
+		    old_left.parent = this.parent;
+		    old_left.right = this;
+		    return old_left.balance();
+		}
+		
+	    }
+	    
+	    // Case 4b: right child is red
+	    if (this.right.getColor() == Color.red ) {
+		PFB<T> RL = ((Branch)this.right).left;
+		
+		if (RL.getColor() == Color.red) {
+		    // Rotate Child Right
+		    Branch<T> old_right = (Branch)this.right;
+		    this.right = RL;
+		    old_right.left = ((Branch)RL).right;
+		    ((Branch)RL).right = old_right;
+		}
+		
+		
+		PFB<T> RR = ((Branch)this.right).right;
+		if (RR.getColor() == Color.red) {
+		    //	this.color = Color.red;
+		    //this.right.setColor(Color.black);
+		    
+		    // Rotate Left
+		    Branch<T> old_right = (Branch)this.right;
+		    this.right = old_right.left;
+		    old_right.parent = this.parent;
+		    old_right.left = this;
+		    return old_right.balance();
+		}
+	    }
+	    
+	    return this;
+	}
+    }
 }
